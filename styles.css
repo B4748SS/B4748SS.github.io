@@ -1,0 +1,44 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  background-image: url('assets/background.jpg');
+  background-size: cover;
+}
+
+#prayer-times {
+  background-color: rgba(253, 247, 211, 0.8); /* Light golden background */
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+}
+
+#prayer-times p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #006400; /* Dark green */
+  margin: 10px 0;
+}
+
+#iqomah-timer {
+  background-color: rgba(255, 235, 59, 0.8); /* Bright yellow */
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+#real-time-clock {
+  font-size: 30px;
+  font-weight: bold;
+  color: #000080; /* Blue color for real-time clock */
+  text-align: center;
+}
+
+#iqomah-countdown {
+  font-size: 30px;
+  font-weight: bold;
+  color: #e91e63; /* Bright pink for countdown */
+  text-align: center;
+}

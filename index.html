@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prayer Time App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div id="real-time-clock">Loading time...</div>  <!-- Real-time clock -->
+
+  <div id="prayer-times">
+    <p id="fajr-time">Fajr: </p>
+    <p id="dhuhr-time">Dhuhr: </p>
+    <p id="asr-time">Asr: </p>
+    <p id="maghrib-time">Maghrib: </p>
+    <p id="isha-time">Isha: </p>
+  </div>
+
+  <div id="iqomah-timer">
+    <p id="iqomah-countdown">Iqomah Countdown: </p>
+  </div>
+
+  <button onclick="fetchPrayerTimes('Jakarta', 'Indonesia', 'WIB')">Download Prayer Times</button> <!-- Manual data fetch button -->
+  
+  <script src="app.js"></script>  <!-- Link to your JavaScript -->
+</body>
+</html>
