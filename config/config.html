@@ -40,6 +40,97 @@
 
   </div>
 
-  <script src="../app.js"></script>
+  <script>
+    // Embedded provinces and cities data
+    const provincesAndCities = {
+  "Aceh": ["Banda Aceh", "Lhokseumawe", "Subulussalam", "Sabang", "Aceh Besar"],
+  "Bali": ["Denpasar", "Badung", "Gianyar", "Bangli", "Karangasem", "Buleleng"],
+  "Banten": ["Serang", "Tangerang", "Cilegon", "Lebak", "Pandeglang", "Tangerang Selatan"],
+  "Bengkulu": ["Bengkulu City", "Rejang Lebong", "Kaur", "Seluma", "Mukomuko", "Lebong", "Kepahiang"],
+  "Gorontalo": ["Gorontalo City", "Boalemo", "Pohuwato", "Gorontalo Utara", "Bone Bolango"],
+  "Jakarta": ["Central Jakarta", "North Jakarta", "West Jakarta", "East Jakarta", "South Jakarta"],
+  "Jambi": ["Jambi City", "Muaro Jambi", "Tanjung Jabung Timur", "Tanjung Jabung Barat", "Kerinci", "Merangin"],
+  "Jawa Barat": ["Bandung", "Bekasi", "Cimahi", "Bogor", "Depok", "Sukabumi", "Tasikmalaya", "Cirebon", "Kuningan", "Indramayu", "Subang", "Sumedang", "Majalengka"],
+  "Jawa Tengah": ["Semarang", "Solo", "Surakarta", "Magelang", "Purwokerto", "Kudus", "Jepara", "Sragen", "Klaten", "Pekalongan", "Tegal", "Batang", "Pemalang", "Rembang", "Wonosobo"],
+  "Jawa Timur": ["Surabaya", "Malang", "Mojokerto", "Jember", "Probolinggo", "Banyuwangi", "Sidoarjo", "Kediri", "Blitar", "Lamongan", "Madiun", "Magetan", "Tuban"],
+  "Kalimantan Barat": ["Pontianak", "Singkawang", "Sambas", "Ketapang", "Sekadau", "Landak", "Melawi", "Kapuas Hulu", "Sanggau", "Hulu Sungai Selatan"],
+  "Kalimantan Selatan": ["Banjarmasin", "Banjarbaru", "Martapura", "Kotabaru", "Tanjung", "Amuntai", "Barabai", "Bati-Bati", "Tanah Laut"],
+  "Kalimantan Tengah": ["Palangka Raya", "Sampit", "Kuala Kapuas", "Pangkalan Bun", "Barito Selatan", "Barito Timur", "Katingan"],
+  "Kalimantan Timur": ["Samarinda", "Balikpapan", "Bontang", "Kutai Kartanegara", "Penajam Paser Utara", "Paser", "Berau"],
+  "Kalimantan Utara": ["Tarakan", "Nunukan", "Bulik", "Tanjung Selor"],
+  "Kepulauan Bangka Belitung": ["Pangkal Pinang", "Sungailiat", "Toboali", "Muntok", "Koba", "Belinyu"],
+  "Kepulauan Riau": ["Tanjung Pinang", "Batam", "Bintan", "Karimun", "Anambas", "Lingga", "Natuna"],
+  "Lampung": ["Bandar Lampung", "Metro", "Pringsewu", "Lampung Selatan", "Lampung Utara", "Tanggamus", "Way Kanan"],
+  "Maluku": ["Ambon", "Buru", "Maluku Tengah", "Seram Bagian Barat", "Seram Bagian Timur"],
+  "Maluku Utara": ["Ternate", "Tidore", "Halmahera", "Sula"],
+  "Nusa Tenggara Barat": ["Mataram", "Bima", "Dompu", "Sumbawa", "Lombok Barat", "Lombok Tengah", "Lombok Timur"],
+  "Nusa Tenggara Timur": ["Kupang", "Maumere", "Ruteng", "Ende", "Borong", "Larantuka", "Waingapu", "Atambua"],
+  "Papua": ["Jayapura", "Merauke", "Timika", "Manokwari", "Biak", "Sorong", "Wamena", "Fakfak", "Sentani"],
+  "Papua Barat": ["Sorong", "Manokwari", "Fakfak", "Kaimana", "Arfak", "Raja Ampat"],
+  "Riau": ["Pekanbaru", "Dumai", "Bengkalis", "Siak", "Indragiri Hulu", "Rokan Hilir", "Kampar"],
+  "Sulawesi Barat": ["Mamuju", "Majene", "Polewali Mandar", "Mamasa", "Pasangkayu"],
+  "Sulawesi Selatan": ["Makassar", "Palopo", "Parepare", "Maros", "Gowa", "Pangkep", "Barru", "Tana Toraja"],
+  "Sulawesi Tengah": ["Palu", "Donggala", "Mori Atas", "Sigi", "Buol", "Parigi Moutong", "Tojo Una-Una"],
+  "Sulawesi Tenggara": ["Kendari", "Baubau", "Kolaka", "Buton", "Muna", "Bombana"],
+  "Sulawesi Utara": ["Manado", "Bitung", "Tomohon", "Minahasa", "Sangihe", "Bolaang Mongondow"],
+  "Sumatera Barat": ["Padang", "Bukittinggi", "Payakumbuh", "Solok", "Pariaman", "Batusangkar", "Sijunjung"],
+  "Sumatera Selatan": ["Palembang", "Lubuklinggau", "Prabumulih", "Pagar Alam", "Muara Enim", "Lahat"],
+  "Sumatera Utara": ["Medan", "Binjai", "Pematang Siantar", "Lubuk Pakam", "Tebing Tinggi", "Kisaran", "Sibolga"],
+  "Yogyakarta": ["Yogyakarta City", "Bantul", "Sleman", "Gunung Kidul", "Kulon Progo"]
+};
+
+    // Function to populate provinces dropdown
+    function populateProvinces() {
+      const provinceSelect = document.getElementById('province');
+      for (const province in provincesAndCities) {
+        const option = document.createElement('option');
+        option.value = province;
+        option.innerText = province;
+        provinceSelect.appendChild(option);
+      }
+    }
+
+    // Function to update cities dropdown based on the selected province
+    function updateCities() {
+      const provinceSelect = document.getElementById('province');
+      const citySelect = document.getElementById('city');
+      const selectedProvince = provinceSelect.value;
+
+      // Clear previous cities
+      citySelect.innerHTML = '<option value="">--Select City--</option>';
+
+      // If a province is selected, populate the city dropdown
+      if (selectedProvince && provincesAndCities[selectedProvince]) {
+        provincesAndCities[selectedProvince].forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.innerText = city;
+          citySelect.appendChild(option);
+        });
+      }
+    }
+
+    // Function to save configuration to localStorage
+    function saveConfiguration() {
+      const province = document.getElementById('province').value;
+      const city = document.getElementById('city').value;
+      const timezone = document.getElementById('timezone').value;
+
+      if (province && city && timezone) {
+        const config = { province, city, timezone };
+        localStorage.setItem('config', JSON.stringify(config));  // Save to localStorage
+        alert('Configuration Saved! Now you can go back to the Display Page.');
+        window.location.href = '../index.html';  // Redirect to the Display Page
+      } else {
+        alert('Please select all fields!');
+      }
+    }
+
+    // Initialize the configuration page by populating provinces
+    window.onload = function() {
+      populateProvinces();
+    }
+  </script>
+
 </body>
 </html>
