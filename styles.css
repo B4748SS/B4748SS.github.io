@@ -5,40 +5,191 @@ body {
   padding: 0;
   background-image: url('assets/background.jpg');
   background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 #prayer-times {
-  background-color: rgba(253, 247, 211, 0.8); /* Light golden background */
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Prayer Grid Layout */
+.prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  width: 70vw;
+  height: 70vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.prayer-box {
+  background-color: transparent;
   border-radius: 15px;
   padding: 20px;
-  margin: 20px;
-  text-align: center;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#prayer-times p {
-  font-size: 24px;
+.prayer-box:hover {
+  transform: translateY(-5px);
+}
+
+.prayer-box.active {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.prayer-time {
+  font-size: 8rem;
   font-weight: bold;
   color: #006400; /* Dark green */
-  margin: 10px 0;
-}
-
-#iqomah-timer {
-  background-color: rgba(255, 235, 59, 0.8); /* Bright yellow */
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 20px;
+  margin: 0;
+  text-align: center;
 }
 
 #real-time-clock {
-  font-size: 30px;
+  font-size: 6rem;
   font-weight: bold;
-  color: #000080; /* Blue color for real-time clock */
+  color: yellow;
   text-align: center;
 }
 
-#iqomah-countdown {
-  font-size: 30px;
+/* Next Prayer Info */
+.next-prayer-info {
+  position: absolute;
+  bottom: 120px;
+  right: 400px;
+  text-align: right;
+  color: #000080; /* Navy blue */
+  width: 100%;
+}
+
+.next-prayer-name {
+  font-size: 3rem;
   font-weight: bold;
-  color: #e91e63; /* Bright pink for countdown */
+  margin-bottom: 5px;
+}
+
+.next-prayer-time {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.config-button-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+button {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Configuration page styles */
+#config-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+#config-container h1 {
   text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+#config-container div {
+  margin-bottom: 20px;
+}
+
+#config-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+#config-container select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+}
+
+#config-container select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .prayer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .prayer-time {
+    font-size: 6rem;
+  }
+  
+  #config-container {
+    margin: 10px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .prayer-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .prayer-box {
+    padding: 15px;
+  }
+  
+  .prayer-time {
+    font-size: 2.5rem;
+  }
 }

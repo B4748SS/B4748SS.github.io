@@ -8,22 +8,44 @@
 </head>
 <body>
 
-  <div id="real-time-clock">Loading time...</div>  <!-- Real-time clock -->
-
   <div id="prayer-times">
-    <p id="fajr-time">Fajr: </p>
-    <p id="dhuhr-time">Dhuhr: </p>
-    <p id="asr-time">Asr: </p>
-    <p id="maghrib-time">Maghrib: </p>
-    <p id="isha-time">Isha: </p>
+    <div class="prayer-grid">
+      <div class="prayer-box" id="fajr-box">
+        <div class="prayer-time" id="fajr-time">--:--</div>
+      </div>
+      
+      <div class="prayer-box" id="realtime-box">
+        <div class="prayer-time" id="real-time-clock">--:--</div>
+      </div>
+      
+      <div class="prayer-box" id="dhuhr-box">
+        <div class="prayer-time" id="dhuhr-time">--:--</div>
+      </div>
+      
+      <div class="prayer-box" id="asr-box">
+        <div class="prayer-time" id="asr-time">--:--</div>
+      </div>
+      
+      <div class="prayer-box" id="maghrib-box">
+        <div class="prayer-time" id="maghrib-time">--:--</div>
+      </div>
+      
+      <div class="prayer-box" id="isha-box">
+        <div class="prayer-time" id="isha-time">--:--</div>
+      </div>
+    </div>
+    
+    <div class="next-prayer-info">
+      <div class="next-prayer-name" id="next-prayer-name">--</div>
+      <div class="next-prayer-time" id="next-prayer-time">--:--</div>
+    </div>
   </div>
 
-  <div id="iqomah-timer">
-    <p id="iqomah-countdown">Iqomah Countdown: </p>
+  <div class="config-button-container">
+    <button onclick="window.location.href='config/config.html'">⚙️ Configuration</button>
   </div>
-
-  <button onclick="window.location.href='config/config.html'">Go to Configuration</button> <!-- Link to configuration page -->
   
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="app.js"></script>  <!-- Link to your JavaScript -->
 </body>
 </html>

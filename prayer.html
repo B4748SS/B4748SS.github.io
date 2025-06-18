@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prayer Time</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .prayer-display {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      background-color: #000080;
+      color: white;
+    }
+    
+    .prayer-name {
+      font-size: 300px;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #FFD700;
+    }
+    
+    .prayer-time {
+      font-size: 300px;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #FF6B6B;
+    }
+    
+    .iqomah-countdown {
+      font-size: 300px;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #4ECDC4;
+    }
+    
+    .current-time {
+      font-size: 2rem;
+      color: #95A5A6;
+      margin-bottom: 1rem;
+    }
+    
+    .status-text {
+      font-size: 4rem;
+      color: #BDC3C7;
+    }
+    
+    .audio-enable {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #FFD700;
+      color: #000080;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    
+    .audio-status {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      color: #FFD700;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="prayer-display">
+    <div id="current-time" class="current-time"></div>
+    <div id="prayer-name" class="prayer-name"></div>
+    <div id="iqomah-countdown" class="iqomah-countdown"></div>
+    <div id="prayer-time" class="prayer-time"></div>
+    <div id="status-text" class="status-text"></div>
+  </div>
+
+  <!-- Audio enable button -->
+  <button id="audio-enable-btn" class="audio-enable" onclick="enableAudio()">🔊 Enable Audio</button>
+  <div id="audio-status" class="audio-status">Audio: Disabled</div>
+
+  <!-- Audio elements -->
+  <audio id="adzan-audio" src="sounds/adzan.mp3" preload="auto"></audio>
+  <audio id="iqomah-audio" src="sounds/iqomah.mp3" preload="auto"></audio>
+
+  <script>
+    let currentPrayer = '';
+    let prayerTime = '';
+    let currentPhase = 'name'; // 'name', 'iqomah', 'time'
+    let phaseStartTime = 0;
+    let countdownInterval;
+    let adzanPlayed = false;
+    let iqomahPlayed = false;
+    let audioEnabled = false;
+
+    // Function to enable audio (called on user interaction)
+    function enableAudio() {
+      audioEnabled = true;
+      const adzanAudio = document.getElementById('adzan-audio');
+      const iqomahAudio = document.getElementById('iqomah-audio');
+      
+      // Set volume and prepare audio
+      adzanAudio.volume = 1.0;
+      iqomahAudio.volume = 1.0;
+      
+      // Load audio
+      adzanAudio.load();
+      iqomahAudio.load();
+      
+      // Update UI
+      document.getElementById('audio-enable-btn').style.display = 'none';
+      document.getElementById('audio-status').textContent = 'Audio: Enabled';
+      document.getElementById('audio-status').style.color = '#4ECDC4';
+      
+      console.log('Audio enabled');
+    }
+
+    // Function to play audio with multiple fallbacks
+    function playAudio(audioElement, audioName) {
+      if (!audioEnabled) {
+        console.log('Audio not enabled yet');
+        return;
+      }
+      
+      // Reset audio to beginning
+      audioElement.currentTime = 0;
+      
+      // Try to play with different methods
+      const playPromise = audioElement.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log(`${audioName} playing successfully`);
+          })
+          .catch(error => {
+            console.log(`${audioName} play failed:`, error);
+            // Try alternative method
+            setTimeout(() => {
+              audioElement.play().catch(e => console.log('Second attempt failed:', e));
+            }, 100);
+          });
+      }
+    }
+
+    // Function to get URL parameters
+    function getUrlParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Function to update current time
+    function updateCurrentTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('current-time').textContent = timeString;
+    }
+
+    // Function to show prayer name
+    function showPrayerName() {
+      document.getElementById('prayer-name').style.display = 'block';
+      document.getElementById('iqomah-countdown').style.display = 'none';
+      document.getElementById('prayer-time').style.display = 'none';
+      document.getElementById('status-text').textContent = 'Prayer Time';
+      
+      // Play adzan audio at the beginning of phase 1
+      if (!adzanPlayed && audioEnabled) {
+        const adzanAudio = document.getElementById('adzan-audio');
+        playAudio(adzanAudio, 'Adzan');
+        adzanPlayed = true;
+      }
+    }
+
+    // Function to show iqomah countdown
+    function showIqomahCountdown() {
+      document.getElementById('prayer-name').style.display = 'none';
+      document.getElementById('iqomah-countdown').style.display = 'block';
+      document.getElementById('prayer-time').style.display = 'none';
+      document.getElementById('status-text').textContent = 'Iqomah';
+      
+      // Start countdown from 9 minutes
+      let countdownMinutes = 9;
+      let countdownSeconds = 0;
+      
+      function updateCountdown() {
+        if (countdownMinutes === 0 && countdownSeconds === 0) {
+          clearInterval(countdownInterval);
+          
+          // Play iqomah audio at the end of phase 2
+          if (!iqomahPlayed && audioEnabled) {
+            const iqomahAudio = document.getElementById('iqomah-audio');
+            playAudio(iqomahAudio, 'Iqomah');
+            iqomahPlayed = true;
+          }
+          
+          showPrayerTime();
+          return;
+        }
+        
+        if (countdownSeconds === 0) {
+          countdownMinutes--;
+          countdownSeconds = 59;
+        } else {
+          countdownSeconds--;
+        }
+        
+        document.getElementById('iqomah-countdown').textContent = 
+          `${countdownMinutes}:${countdownSeconds.toString().padStart(2, '0')}`;
+      }
+      
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Function to show prayer time
+    function showPrayerTime() {
+      document.getElementById('prayer-name').style.display = 'none';
+      document.getElementById('iqomah-countdown').style.display = 'none';
+      document.getElementById('prayer-time').style.display = 'block';
+      document.getElementById('status-text').textContent = 'Prayer Time';
+      document.getElementById('prayer-time').textContent = currentPrayer;
+    }
+
+    // Function to redirect to index.html
+    function redirectToIndex() {
+      window.location.href = 'index.html';
+    }
+
+    // Main function to manage prayer flow
+    function managePrayerFlow() {
+      const now = new Date();
+      const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
+      
+      if (currentPhase === 'name') {
+        showPrayerName();
+        // After 1 minute, switch to iqomah countdown
+        setTimeout(() => {
+          currentPhase = 'iqomah';
+          showIqomahCountdown();
+        }, 60000); // 1 minute
+      }
+      // iqomah phase is handled by the countdown function
+      // time phase is handled by the showPrayerTime function
+    }
+
+    // Initialize the page
+    window.onload = function() {
+      // Get prayer name and time from URL parameters
+      currentPrayer = getUrlParameter('prayer') || 'Prayer';
+      prayerTime = getUrlParameter('time') || '00:00';
+      
+      // Set prayer name
+      document.getElementById('prayer-name').textContent = currentPrayer;
+      
+      // Enable audio on any user interaction
+      document.addEventListener('click', enableAudio, { once: true });
+      document.addEventListener('keydown', enableAudio, { once: true });
+      document.addEventListener('touchstart', enableAudio, { once: true });
+      
+      // Start current time updates
+      updateCurrentTime();
+      setInterval(updateCurrentTime, 1000);
+      
+      // Start prayer flow
+      managePrayerFlow();
+      
+      // After 11 minutes total (1 + 9 + 1), redirect to index.html
+      setTimeout(redirectToIndex, 660000); // 11 minutes
+    };
+  </script>
+</body>
+</html> 
