@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration Page</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div id="config-container">
+    <h1>Select Your Location</h1>
+
+    <div>
+      <label for="province">Select Province:</label>
+      <select id="province" onchange="updateCities()">
+        <option value="">--Select Province--</option>
+        <!-- Provinces will be populated here -->
+      </select>
+    </div>
+
+    <div>
+      <label for="city">Select City:</label>
+      <select id="city">
+        <option value="">--Select City--</option>
+        <!-- Cities will be populated based on the selected province -->
+      </select>
+    </div>
+
+    <div>
+      <label for="timezone">Select Timezone:</label>
+      <select id="timezone">
+        <option value="WIB">WIB (GMT+7)</option>
+        <option value="WITA">WITA (GMT+8)</option>
+        <option value="WIT">WIT (GMT+9)</option>
+      </select>
+    </div>
+
+    <button onclick="saveConfiguration()">Save Configuration</button>
+
+  </div>
+
+  <script src="../app.js"></script>
+</body>
+</html>
